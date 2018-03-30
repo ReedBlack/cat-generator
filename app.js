@@ -1,13 +1,18 @@
 const baseUrl = 'https://www.reddit.com/r/cats/top/.json?count=25'
-const page2Url = 'https://www.reddit.com/r/cats/top/.json?count=25&after'
-const page3Url = 'https://www.reddit.com/r/cats/top/.json?count=50&after'
-const page4Url = 'https://www.reddit.com/r/cats/top/.json?count=75&after'
+const page2Url = 'https://www.reddit.com/r/cats/top/.json?count=25&after=t3_889soh'
+const page3Url = 'https://www.reddit.com/r/cats/top/.json?count=50&after=t3_887sb4'
+const page4Url = 'https://www.reddit.com/r/cats/top/.json?count=75&after=t3_8882ko'
 const catDisplay = document.querySelector('.cats')
-const urlArr = []
 
-catDisplay.addEventListener('click', showCats)
+const urlArr = []
+const urlArr2 = []
+const urlArr3 = []
+const urlArr4 = []
+
 
 showCats()
+catDisplay.addEventListener('click', showCats)
+catDisplay.addEventListener('click', clearArray)
 
 function showCats() {
   fetch(baseUrl)
@@ -26,11 +31,11 @@ function showCats() {
           return response.json()
         })
         .then(function(moreCats) {
-          for (var j = 0; j < moreCats.data.children.length; j++) {
-            let currentPost2 = moreCats.data.children[j]
+          for (var i = 0; i < moreCats.data.children.length; i++) {
+            let currentPost2 = moreCats.data.children[i]
             if (!currentPost2.data.url.includes('.jpg')) {
             } else {
-              urlArr.push(currentPost2.data.url)
+              urlArr2.push(currentPost2.data.url)
             }
           }
           fetch(page3Url)
@@ -38,11 +43,11 @@ function showCats() {
               return response.json()
             })
             .then(function(moar) {
-              for (var k = 0; k < moar.data.children.length; k++) {
-                let currentPost3 = moar.data.children[k]
+              for (var i = 0; i < moar.data.children.length; i++) {
+                let currentPost3 = moar.data.children[i]
                 if (!currentPost3.data.url.includes('.jpg')) {
                 } else {
-                  urlArr.push(currentPost3.data.url)
+                  urlArr3.push(currentPost3.data.url)
                 }
               }
               fetch(page4Url)
@@ -50,17 +55,25 @@ function showCats() {
                   return response.json()
                 })
                 .then(function(evenMoreCats) {
-                  for (var l = 0; l < evenMoreCats.data.children.length; l++) {
-                    let currentPost4 = evenMoreCats.data.children[l]
+                  for (var i = 0; i < evenMoreCats.data.children.length; i++) {
+                    let currentPost4 = evenMoreCats.data.children[i]
                     if (!currentPost4.data.url.includes('.jpg')) {
                     } else {
-                      urlArr.push(currentPost4.data.url)
+                      urlArr4.push(currentPost4.data.url)
                     }
                   }
-                  var randomUrl = urlArr[Math.floor(Math.random() * urlArr.length)]
+                  var joinedArr = urlArr.concat(urlArr2, urlArr3, urlArr4)
+                  var randomUrl = joinedArr[Math.floor(Math.random() * joinedArr.length)]
                   catDisplay.src = randomUrl
+
                 })
             })
         })
     })
+
 }
+
+function clearArray(){
+  joinedArr = []
+}
+// console.log(joinedArr);
